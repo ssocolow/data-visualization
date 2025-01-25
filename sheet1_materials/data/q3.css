@@ -1,0 +1,19 @@
+.circle {
+    fill: blue;
+    opacity: 0.3;
+}
+.axis-label {
+    font-size: x-large;
+    fill: gray;
+}
+.ylabel {
+    font-size: x-large;
+    fill: gray;
+}
+.ticktext {
+    font-size: 20px;
+    color: gray;
+  }
+  .tickline {
+    color: gray;
+  }

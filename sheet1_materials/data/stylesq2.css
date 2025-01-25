@@ -10,3 +10,17 @@ body {
   text {
     font-size: 1.3em;
   }
+  .axis-label {
+    font-size: x-large;
+    color: gray;
+  }
+  .ticktext {
+    font-size: 20px;
+    color: gray;
+  }
+  .tickline {
+    color: gray;
+  }
+  h1 {
+    color: gray;
+  }
