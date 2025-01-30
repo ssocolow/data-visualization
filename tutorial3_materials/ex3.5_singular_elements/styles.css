@@ -1,0 +1,14 @@
+body {
+  margin: 0px;
+  overflow: hidden;
+}
+
+text {
+  font-family: sans-serif;
+  font-size: 1.2em;
+  text-anchor: middle;
+}
+
+rect {
+  fill: lightgrey;
+}

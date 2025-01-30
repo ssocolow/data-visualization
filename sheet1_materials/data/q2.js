@@ -13,7 +13,7 @@ const render = data => {
   d3.select('h1')
     .text(`Top ${data.length} Most Populous Countries`);
   
-  const margin = { top: 20, bottom: 50, left: 100, right: 40 };
+  const margin = { top: 10, bottom: 50, left: 100, right: 40 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 

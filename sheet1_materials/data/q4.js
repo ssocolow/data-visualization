@@ -37,14 +37,26 @@ const area = d3.area()
   .y0(yScale(1864.780029))        // Y scale for the baseline (bottom of the area)
   .y1(d => yScale(yValue(d))); // Y scale for the data points (top of the area)
 
+  const lineGenerator = d3.line()
+    .x(d => xScale(xValue(d)))
+    .y(d => yScale(yValue(d)));
 
   g.append('path')
       .data([data])
       .attr('class','area')
       .attr("d", area)
-      .attr('stroke', 'blue')  // Change the stroke color to blue or any other color
+      // .attr('stroke', 'blue')  // Change the stroke color to blue or any other color
       .attr('stroke-width', 2)
       .attr('fill','aliceblue')
+  
+  g.append('path')
+    .attr('d',lineGenerator(data))
+    .attr('class','chart-line')
+    // .attr("d", area)
+    // .attr('stroke', 'blue')  // Change the stroke color to blue or any other color
+    // .attr('stroke-width', 2)
+    // .attr('fill','aliceblue')
+
   // Create axes
   g.append('g').call(d3.axisLeft(yScale))
 

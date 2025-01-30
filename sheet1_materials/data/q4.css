@@ -13,3 +13,9 @@
   .tickline {
     color: gray;
   }
+
+.chart-line {
+  fill: none;
+  stroke: #517390;
+  stroke-width: 2px;
+}

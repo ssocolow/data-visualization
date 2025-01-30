@@ -68,6 +68,7 @@ const render = data => {
     .attr("x", -innerHeight / 2)
     .attr("transform", "rotate(-90)")
     .text("Weight");
+
 //   g.append("text")
 //     .text("Weight")
 //     .attr("class","axis-label-rotated")
