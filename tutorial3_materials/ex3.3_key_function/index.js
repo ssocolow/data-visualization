@@ -38,7 +38,7 @@ function drawCircles(parent, data) {
     .transition().duration(500)
       .attr('cx', (d,i) => (i * 80) + 50)
       .attr('r', d => d);
-
+  console.log('hi')
   // Exit
   circles.exit()
     .transition().duration(500)
