@@ -9,6 +9,6 @@ export const sizeLegend = (parent, props) => {
   } = props;
 
   // Write your code here
-  // ...
+  // to create the "component"  
 
 }

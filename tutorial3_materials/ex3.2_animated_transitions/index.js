@@ -18,6 +18,7 @@ function drawCircles(parent, data) {
   const circlesEnter = circles.enter().append('circle');
 
   // Enter and Update (set the dynamic properties of the elements)
+  console.log('merging')
   circlesEnter.merge(circles)
     .attr('cx', (d,i) => (i * 80) + 50)
     .attr('cy', height/2)
@@ -25,6 +26,7 @@ function drawCircles(parent, data) {
       .attr('r', d => d);
 
   // Exit
+  console.log('remove')
   circles.exit()
     .transition().duration(500)
       .attr('r', 0)
