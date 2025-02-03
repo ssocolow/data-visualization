@@ -7,7 +7,7 @@ const colourScale = d3.scaleOrdinal()
   .domain(['apple','lemon', 'lime', 'orange'])
   .range(['#c11d1d','#eae600', 'green', 'orange']);
 
-svg.append('g')
+  svg.append('g')
     .attr('transform', `translate(100,150)`)
     .call(colourLegend, { 
       colourScale, 
