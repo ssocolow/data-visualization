@@ -1,0 +1,17 @@
+Type of cheese (e.g., Swiss, Brie) - categorical
+Eye colour - categorical
+Class mark (e.g., C, A, F) - ordinal
+Tire pressure - quantitative
+First name - categorical
+ISBN numbers (e.g., 978-1-4665-0891-0) - categorical
+Unemployment rate - quantitative
+Starbucks drink sizes - ordinal
+Date an email newsletter was sent - ordinal
+Season-episode IDs for every episode of ‘The Crown’ - ordinal
+Rankings of the top 10 movies on Netflix in UK - ordinal
+Fish species in the Scottish sea - categorical
+Weight classes of boxers (e.g., feather, heavy, fly) - ordinal
+Model of an airplane - categorical
+Wingspan of bird - quantitative
+100 metre race times - quantitative
+Personality of your cat - categorical
