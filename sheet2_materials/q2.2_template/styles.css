@@ -10,6 +10,8 @@ circle {
 
 text {
   font-family: sans-serif;
+  font-size: xx-large;
+  fill: gray;
 }
 
 .tick text {

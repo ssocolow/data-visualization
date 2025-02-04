@@ -18,6 +18,17 @@ const render = () => {
 
   // Add timed second-call to the scatterplot module
   // ...
+  setTimeout(() => {              // Implement delay
+    svg.call(scatterPlot, {
+      data,
+      margin: { top: 50, bottom: 80, left: 150, right: 40 },
+      xValue: d => d.displacement,
+      xAxisLabel: 'Displacement',
+      yValue: d => d.acceleration,
+      yAxisLabel: 'Acceleration',
+      circleRadius: 10
+    });
+  }, 3000);
 
 };
 
