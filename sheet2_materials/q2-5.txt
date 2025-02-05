@@ -1,0 +1,30 @@
+1.  dataset type: table with items and attributes. 
+    there are seven attributes/types. 
+    there are 499 items.
+
+2.  aiddata_id: categorical - 499 categories
+    year: ordinal - 19 categories
+    donor: categorical - 25 categories
+    recipient: categorical - 129 categories
+    commitment_amount_usd_constant: quantitative - range (0.152847, 101905000)
+    coalesced_purpose_code: categorical - 127 categories
+    coalesced_purpose_name: categorical - 135 categories
+
+3. Yes, there is a huge range of the usd amount committed, and later years (like 2010) have many more items (table entries) than the 90s, which might mean there weren't as many projects back then, or maybe this dataset just doesn't contain them.
+
+Two questions I would like to answer with this dataset, from the POV of an aid worker reporting to the government of a country providing aid.
+
+Which countries are receiving the most money from this country and for what reason?
+    I can use a segmented pie chart (with colored slices representing a country and subslices for each reason) to visually answer this question.
+    discover distribution
+    dono, recipient, commitment_amount_usd_constant
+    I have all the data I need
+    No transformations needed
+
+Is the trend of this country's expenditure on aid grants increasing or decreasing, and what is its history compared to global aid expenditure?
+    I can use a multi bar chart or a line graphs to visually show this
+    compare trends
+    year, donor, commitment_amount_usd_constant
+    I would need additional data fields that are not provided: the total commitment_amount_usd_constant across all countries for every year
+    I would need to transform the data by tracking the sum of commitment_amount_usd_constant for each year.
+
