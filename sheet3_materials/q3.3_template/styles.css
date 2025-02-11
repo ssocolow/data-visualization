@@ -1,0 +1,45 @@
+body {
+  margin: 0px;
+  overflow: hidden;
+}
+text {
+  font-family: sans-serif;
+}
+.title {
+  font-size: 2em;
+  fill: #635F5D;
+}
+
+/* Axes */
+.x-axis .domain {
+  stroke: #8693a0;
+}
+.tick text {
+  font-size: 1.5em;
+  fill: #6b6b6b;
+}
+.tick line {
+  stroke: #C0C0BB
+}
+
+/* Charts */
+.chart-area {
+  fill: #e9eff5;
+}
+.chart-line {
+  fill: none;
+  stroke: #517390;
+  stroke-width: 2px;
+}
+
+/* Data source */
+.source {
+  margin-top: 10px;
+  margin-left: 40px;
+  font-size: 0.75em;
+  font-family: sans-serif;
+  color: #888;
+}
+.source a {
+  color: #888;
+}
