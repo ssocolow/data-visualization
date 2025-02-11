@@ -1,7 +1,7 @@
 export const colourLegend = (parent, props) => {
   // unpack my props
   const { 
-    colourScale, 
+    colourScale,
     circleRadius,
     spacing,
     textOffset
@@ -20,6 +20,6 @@ const labels = parent.selectAll('text')
 const labelsEnter = labels.enter().append('text')
   .attr('x', textOffset)
   .attr('y', (d,i) => (i * spacing) + 85)
-  .text(d => d) 
+  .text(d => d)
 
 }

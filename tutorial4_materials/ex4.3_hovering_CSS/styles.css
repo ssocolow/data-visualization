@@ -1,0 +1,13 @@
+body {
+  margin: 0px;
+  overflow: hidden;
+}
+
+circle {
+  fill: steelblue;
+}
+
+circle:hover {
+  stroke: black;
+}
+

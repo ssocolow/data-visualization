@@ -29,7 +29,7 @@ export const scatterPlot = (parent, props) => {
   const gMerge = gEnter.merge(g);
 
   // Remove any extra groups
-  g.exit().remove();
+  // g.exit().remove();
 
   // x-axis
   const xScale = d3.scaleLinear()
@@ -116,7 +116,7 @@ export const scatterPlot = (parent, props) => {
     .attr('cy', d => yScale(yValue(d)));
     
   // Exit selection - remove circles that are no longer needed
-  circles.exit().remove();
+  // circles.exit().remove();
 
   // // add the data points to the chart
   // data.forEach(d => {

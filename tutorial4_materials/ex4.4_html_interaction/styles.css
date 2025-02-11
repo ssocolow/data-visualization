@@ -1,0 +1,22 @@
+body {
+  margin: 0px;
+  overflow: hidden;
+}
+
+text {
+  font-family: monospace;
+  font-size: 2em;
+}
+
+#menus {
+  font-family: sans-serif;
+  font-size: 1.5em;
+}
+
+#menus select {
+  font-size: 1.5rem;
+}
+
+#menus select option {
+  font-size: 1rem;
+}
