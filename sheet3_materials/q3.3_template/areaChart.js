@@ -70,4 +70,41 @@ export const areaChart = (parent, props) => {
     .attr('class','chart-line')
     .attr('d', lineGenerator(data));
 
+  // add the invisible rectangle
+  parent.append('rect')
+    .attr('transform', `translate(${margin.left},${margin.top})`)
+    .attr('width', innerWidth)
+    .attr('height', innerHeight)
+    .attr('fill', 'none')
+    .attr('pointer-events', 'all')
+    .on('mousemove', (event, d) => {
+      const pos = d3.pointer(event);
+      const x = xScale.invert(pos[0]);
+      const index = d3.bisectLeft(data.map(xValue), x);
+      const closest = data[index];
+      // console.log(yScale(yValue(closest)));
+      chart.selectAll('circle').remove();
+
+      chart.append('circle')
+        .attr('cx', pos[0])
+        .attr('cy', yScale(yValue(closest)))
+        .attr('r', 4)
+        .attr('fill', '#5cd237')
+
+      d3.select('#tooltip')
+        .style('display', 'block')
+        .style('left', (pos[0] + margin.left) + 'px')   
+        .style('top', (yScale(yValue(closest)) + margin.top - 30) + 'px')
+        .html(`
+          <div class="tooltip-title">${Math.round(yValue(data[index]))}</div>
+        `);
+    })
+    .on('mouseleave', () => {
+      d3.select('#tooltip').style('display', 'none');
+      chart.selectAll('circle').remove();
+    })
+    .on('mouseenter', () => {
+      d3.select('#tooltip').style('display', 'block');
+    });
+
 };
