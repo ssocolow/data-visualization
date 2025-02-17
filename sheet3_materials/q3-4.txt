@@ -1,15 +1,19 @@
 Pizza:
     interlocking area mark for portion of pizza
     color channel for which type of hunger the portion of pizza is feeding
+    angle channel for helping to see area
 
 US Insurance:
     marks: maps of the US for each income, age range pair
     channels: color saturation heatmap for decrease in monthly insurance price under stimulus bill
+        spatial region in the states
+        position on a common scale for age and income
 
 US Stimulus:
     marks: points for how much aid a family recieved
     channels: size of points for number of housholds in the income group
             position on a common scale for multiple graphs comparing this week's bill to other two bills
+            also position on a common scale for avg aid
 
 Kobe Bryant's shots:
     marks: points for each of his shots
@@ -17,12 +21,13 @@ Kobe Bryant's shots:
             color for something? cant tell but pretty evenly distributed
 
 Daily Routines:
-    marks: interlocking areas for each person
+    marks: line for each activity for each person
     channels: position on a common scale showing what time of day activities were
             color for type of activity
+            length of the line for how long the activity is
 
 Bob Ross:
     marks: points for each object painted in each episode
     channels: position on a common scale to tell the episode
         size of points to show frequency in the episode
-        color saturation to show what kind of object?
+        color saturation to also show frequency

@@ -6,8 +6,8 @@ const svg = d3.select('svg');
 let data;
 //...
 
-const optionX = ['mpg','cylinders','displacement','horsepower','weight','acceleration','year','origin','name'];
-const optionY = ['mpg','cylinders','displacement','horsepower','weight','acceleration','year','origin','name'];
+const optionX = ['mpg','cylinders','displacement','horsepower','weight','acceleration','year'];
+const optionY = ['mpg','cylinders','displacement','horsepower','weight','acceleration','year'];
 let selectedOptionX = optionX[4];  // state (consistent with first item shown)
 let selectedOptionY = optionY[0];  // state (consistent with first item shown)
 

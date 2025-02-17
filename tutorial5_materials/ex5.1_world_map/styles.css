@@ -1,0 +1,18 @@
+body {
+  margin: 0px;
+  overflow: hidden;
+}
+
+.sphere {
+  fill: #291cc6;
+}
+
+.country {
+  fill: lightgreen;
+  stroke: black;
+  stroke-width: 0.05px;
+}
+
+.country:hover {
+  fill: rgb(255, 0, 166);
+}

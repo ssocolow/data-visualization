@@ -1,5 +1,5 @@
 A: difficult to compare countries in terms of type of water usage because humans are bad at comparing areas
 
-B: Information is too dense at the bottom of the y-axis, because smaller countries are squashed there.
+B: Information is too dense at the bottom of the y-axis, because smaller countries are squashed there. Area no longer means anything because x-axis normalized.
 
-C: Redundant information because of course water usage amount will be correlated with population
+C: harder to tell per capita water usage Redundant information because of course water usage amount will be correlated with population
