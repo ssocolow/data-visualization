@@ -1,6 +1,48 @@
+.sphere {
+  fill: #ffffff;
+}
+
 body {
   overflow: hidden;
   font-family: sans-serif;
   background: #fafcff;
 }
 
+.graticule {
+  fill: none;
+  stroke: #dfdbdb;
+  stroke-width: 0.5px;
+}
+
+.country {
+  fill: rgb(191, 231, 191);
+  stroke: black;
+  stroke-width: 0.05px;
+}
+
+.wonder {
+  fill: rgb(88, 88, 192);
+}
+
+.wonder-title {
+  font-size: 12px;
+}
+
+#tooltip {
+  position: absolute;
+  display: none;
+  background: #44da76;
+  box-shadow: 3px 3px 3px 0px rgb(92 92 92 / 0.5);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px;
+  min-width: 160px;
+  color: #ffffff;
+}
+.tooltip-title {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}

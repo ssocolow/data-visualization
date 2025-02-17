@@ -5,9 +5,10 @@ const svg = d3.select('svg');
 let countries, symbolsData;
 
 const updateVis = () => {
-
-  // ...
-
+  worldmapSymbols(svg, {  
+    countries,
+    symbolsData
+  })
 };
 
 loadAndProcessData().then(loadedData => {

@@ -24,6 +24,7 @@ export const choroplethMap = (parent, props) => {
   .on('zoom', (event) => {
     mapGroup.attr('transform', event.transform)
   })
+  mapGroup.call(zoom)
   
   // Append our paths for the countries
   // ...
@@ -54,8 +55,8 @@ export const choroplethMap = (parent, props) => {
       .on('mouseleave', () => {
         d3.select('#tooltip').style('display', 'none');
       })
-    .append('title')
-      .text(d => d.properties.name);
+    // .append('title')
+    //   .text(d => d.properties.name);
 
 
 }
