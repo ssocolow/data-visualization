@@ -1,0 +1,14 @@
+What type of view coordination is used (single view, multiform, small multiples, overview/detail multiform,
+overview/detail same form)? Justify your choice very briefly in terms of whether the visual encoding is
+same or different, and whether data is shared between views or subsetted.
+
+For each kind of mark used, state the mark type and which channels are used to encode what attribute on
+that mark.
+
+A:
+    view coordination type is overview/detail same form view because the visual encoding is spatial of the US for both levels and the data is subsetted
+    marks: choropleth maps of the US. channels: spatial for where in high level the map is - which state it corresponds to - and color saturation encoding that state's out-migrants
+
+B:
+    view coordination type is multiform because the visual encoding is different - map vs bar chart - but the underlying data is the same - distribution of what % of statistics are claimed to be made up.
+    marks: circles for map and lines for bar chart. channels: color and size both encode the % of statistics claimed to be made up (redundant channel) and length encodes the number of tweets claiming a specific percentage.
