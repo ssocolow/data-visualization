@@ -3,11 +3,16 @@
   <head>
     <title>Scatter plot with menus</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <svg width="960" height="500"></svg>
     <script src="index.js" type="module"></script>
-    <button id="clear-button">Clear Points</button>
+    <div>
+      <p>You can zoom and pan the scatter plot</p>
+        <button id="clear-button">Clear Points</button>
+        <div id="math"></div>
+    </div>
   </body>
 </html>

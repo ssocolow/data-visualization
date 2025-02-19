@@ -3,6 +3,11 @@ body {
   overflow: hidden;
 }
 
+.country {
+  stroke-width: 1px;
+  stroke: #000;
+}
+
 /* Tooltip */
 #tooltip {
   position: absolute;

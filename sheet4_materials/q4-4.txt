@@ -6,7 +6,7 @@ For each kind of mark used, state the mark type and which channels are used to e
 that mark.
 
 A:
-    view coordination type is overview/detail same form view because the visual encoding is spatial of the US for both levels and the data is subsetted
+    view coordination type is small multiples view because the visual encoding is spatial of the US for both levels and the data is unique
     marks: choropleth maps of the US. channels: spatial for where in high level the map is - which state it corresponds to - and color saturation encoding that state's out-migrants
 
 B:

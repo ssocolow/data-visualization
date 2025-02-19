@@ -27,6 +27,18 @@ const updateVis = () => {
     margin: { top: 50, bottom: 80, left: 150, right: 40 },
     circleRadius: 10
   });
+
+  // Create matrix string from data points
+  const xMatrix = data.map(point => `1 & ${point.x.toFixed(2)}`).join(' \\\\ ');
+  const yVector = data.map(point => point.y.toFixed(2)).join(' \\\\ ');
+  const matrixStr = data.length > 0
+    ? `\\begin{bmatrix}${xMatrix}\\end{bmatrix} \\begin{bmatrix}b \\\\ m\\end{bmatrix} = \\begin{bmatrix}${yVector}\\end{bmatrix}`
+    : 'empty-matrix';
+
+  // refresh math using MathJax
+  d3.select('#math').html(`
+    <p>\\[${matrixStr}\\]</p>`)
+    .each(() => { MathJax.typesetPromise() });
 };
 
 updateVis();

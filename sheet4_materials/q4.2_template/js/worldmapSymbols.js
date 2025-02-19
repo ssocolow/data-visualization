@@ -38,7 +38,7 @@ export const worldmapSymbols = (parent, props) => {
 
   // Paths for countries
   // Render the map by using the path generator
-  mapGroup.selectAll('path').data(countries.features)
+  mapGroup.selectAll('country').data(countries.features)
     .enter().append('path')
       .attr('class','country')
       .attr('d', pathGenerator)
@@ -56,7 +56,7 @@ export const worldmapSymbols = (parent, props) => {
       .attr('r', 0)
       .transition().delay((d, i) => i * 600)
       .duration(1000)
-      .attr('r', d => 8 * d.visitors ** 0.5)
+      .attr('r', d => 1 + (4 * d.visitors ** 0.5))
   
   mapGroup.selectAll('text').data(symbolsData)
     .enter().append('text')
