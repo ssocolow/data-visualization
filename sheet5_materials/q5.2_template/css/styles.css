@@ -1,0 +1,81 @@
+body {
+  font-family: sans-serif;
+  font-size: 13px;
+  padding: 30px;
+}
+
+.container {
+  display: flex;
+}
+.col-left {
+  width: 350px;
+  margin-right: 45px;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+.control-bar {
+  text-align: right;
+}
+
+.source {
+  margin-top: 20px;
+  font-size: 10px;
+  color: #888;
+}
+.source a {
+  color: #888;
+}
+
+
+/* Chart */
+path.area-path {
+  fill-opacity: 0.7;
+}
+
+/* Axes */
+.axis line {
+  fill: none;
+  stroke: #cac8c8;
+  stroke-dasharray: 3;
+  stroke-width: 1;
+}
+.axis-title {
+  font-size: .95rem;
+  fill: #333;
+}
+.axis {
+  font-size: 0.75rem;
+  fill: #333;
+}
+.y-axis .domain, .x-axis .domain {
+  display: none;
+}
+
+/* Legend */
+.legend {
+  list-style: none;
+  padding: 0;
+}
+.legend-item {
+  display: inline-block;
+  margin: 0 0 0 20px;
+  opacity: 0.7;
+}
+.legend-symbol {
+  width: 12px;
+  height: 12px;
+  margin-right: 6px;
+  display: inline-block;
+}
+.legend-item[grouping="BRICS"] .legend-symbol {
+  background: #6080b5;
+}
+.legend-item[grouping="OECD"] .legend-symbol {
+  background: #5a9866;
+}
+.legend-item[grouping="ROW"] .legend-symbol {
+  background: #f7dc7a;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stacked Area Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+  </head>
+  <body>
+    <h1>Global Freshwater Consumption By Region</h1>
+
+    <div class="container">
+        <div class="col-left">
+            Global freshwater use since 1900 is disaggregated by broad regional groupings - BRICS countries (Brazil, Russia, India, China and South Africa); OECD nations; and Rest of the World (ROW) in the chart. Although absolute freshwater use has grown over this period, the distribution of uses between these regional groupings has not changed significantly over the last century: BRICS countries use the largest share at approximately 45 percent; OECD nations use approximately 20-25 percent; and ROW at 30-33 percent.
+            <div class="source">
+                Source: Data from <a href="https://ourworldindata.org/water-use-stress">ourworldindata.org/water-use-stress</a>
+            </div>
+        </div>
+        <div class="col-right">
+            <div class="control-bar">
+                <select id="display-type-selection">
+                    <option value="absolute">Absolute numbers</option>
+                    <option value="relative">Relative numbers</option>
+                </select>
+            </div>
+            <svg id="area-chart" width="600" height="400"></svg>
+            <ul class="legend">
+              <li class="legend-item" grouping="BRICS"><span class="legend-symbol"></span>BRICS</li>
+              <li class="legend-item" grouping="OECD"><span class="legend-symbol"></span>OECD</li>
+              <li class="legend-item" grouping="ROW"><span class="legend-symbol"></span>ROW</li>
+            </ul>        
+        </div>
+    </div>
+    
+    <script src="./js/stackedAreaChart.js"></script> 
+    <script src="./js/index.js"></script> 
+  </body>
+</html>

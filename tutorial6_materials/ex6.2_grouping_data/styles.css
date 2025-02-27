@@ -1,0 +1,25 @@
+body {
+  font-family: sans-serif;
+  font-size: 13px;
+  padding: 30px;
+}
+
+.axis text {
+  font-size: .85rem;
+  fill: #6b6b6b;
+}
+
+.domain, .axis .tick line {
+  stroke: #888;
+}
+
+.cat-0 rect {
+  fill: #6080b5;
+}
+.cat-1 rect {
+  fill: #d4c32d;
+}
+.cat-2 rect {
+  fill: #778899;
+}
+
