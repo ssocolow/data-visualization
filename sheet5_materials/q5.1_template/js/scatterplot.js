@@ -9,7 +9,7 @@ export const scatterplot = (parent, props) => {
     yAxisLabel,
     colourScale,
     colourValue,
-    symbolSize
+    getSelectedDifficulty
   } = props;
 
   const width = +parent.attr('width');
@@ -77,16 +77,31 @@ export const scatterplot = (parent, props) => {
       .text(yAxisLabel);
     
   // Plot data
+  // draw difficult trails with diamonds d3.symbol().type(d3.symbolDiamond)() makes path
   const points = chartEnter.merge(chart)
     .selectAll('.point').data(data);
   const pointsEnter = points
-    .enter().append('circle')
+    .enter().append('path')
       .attr('class', 'point')
-      .attr('cx', d => xScale(xValue(d)))
-      .attr('cy', d => yScale(yValue(d)))
-      .attr('fill', d => colourScale(colourValue(d)))
-      .attr('r', symbolSize)
-      .attr('stroke-width', 2);
+      .attr('transform', d => `translate(${xScale(xValue(d))},${yScale(yValue(d))})`)
+      .attr('fill', d => colourScale(colourValue(d)));
+  
+  // do the merge for when the selected difficulty changes
+  points.merge(pointsEnter)
+    .attr('d', d => {
+      if (getSelectedDifficulty().includes(d.difficulty)) {
+      if (d.difficulty === 'Difficult') {
+        const symbol = d3.symbol().type(d3.symbolDiamond)();
+        return symbol;
+      } else if (d.difficulty === 'Intermediate') {
+        const symbol = d3.symbol().type(d3.symbolSquare)();
+        return symbol;
+      } else {
+        const symbol = d3.symbol().type(d3.symbolCircle)();
+        return symbol;
+      }
+    }
+    });
 
   // Tooltip event listeners
   const tooltipPadding = 15;

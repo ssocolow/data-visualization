@@ -5,8 +5,21 @@ const svg = d3.select('svg');
 // Global/state variables
 let data;
 const difficultyLevels = ['Easy','Intermediate','Difficult'];
+let selectedDifficulty = ['Easy','Intermediate','Difficult'];
 const dataBars = [];
 
+// function to change the selected difficulty
+function changeSelectedDifficulty(difficulty) {
+  selectedDifficulty = difficulty;
+  updateVis();
+  // console.log(selectedDifficulty);
+}
+
+function getSelectedDifficulty() {
+  return selectedDifficulty;
+}
+
+// when user clicks on a bar, change the state and updateVis to only show certain parts of the data
 // Colour scale (shared between views)
 const colourScale = d3.scaleOrdinal()
   .range(['#b1e8a5', '#7bc77e', '#2a8d46']) // light green to dark green
@@ -25,7 +38,7 @@ const updateVis = () => {
     yAxisLabel: 'Hours',
     colourScale,
     colourValue: d => d.difficulty,
-    symbolSize: 4
+    getSelectedDifficulty
   });
 
   // refresh barchart
@@ -37,7 +50,9 @@ const updateVis = () => {
     yValue: d => d.count,
     yAxisLabel: 'Trails',
     colourScale,
-    colourValue: d => d.level
+    colourValue: d => d.level,
+    changeSelectedDifficulty,
+    getSelectedDifficulty
   });
 
 };

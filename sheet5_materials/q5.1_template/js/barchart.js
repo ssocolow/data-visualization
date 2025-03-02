@@ -8,7 +8,9 @@ export const barchart = (parent, props) => {
     yValue, 
     yAxisLabel,
     colourScale,
-    colourValue
+    colourValue,
+    changeSelectedDifficulty,
+    getSelectedDifficulty
   } = props;
 
   const width = +parent.attr('width');
@@ -68,6 +70,8 @@ export const barchart = (parent, props) => {
   // Plot data
   const bars = chartEnter.merge(chart)
     .selectAll('.bar').data(data);
+  
+  // Enter new bars
   const barsEnter = bars
     .enter().append('rect')
       .attr('class', 'bar')
@@ -77,5 +81,15 @@ export const barchart = (parent, props) => {
       .attr('y', d => yScale(yValue(d)))
       .attr('fill', d => colourScale(colourValue(d)));
 
+  // Update both existing and new bars
+  bars.merge(barsEnter)
+    .on('click', (event, d) => {
+      if (getSelectedDifficulty().includes(d.level)) {  
+        changeSelectedDifficulty(getSelectedDifficulty().filter(n => n !== d.level));
+      } else {
+        changeSelectedDifficulty([...getSelectedDifficulty(), d.level]);
+      }
+    })
+    .attr('opacity', d => getSelectedDifficulty().includes(d.level) ? 1 : 0.2);
 };
 
