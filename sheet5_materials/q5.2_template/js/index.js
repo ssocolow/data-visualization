@@ -24,5 +24,11 @@ d3.csv('data/freshwater-use-by-aggregated-region.csv')
     // Note: subsequent changes in state can be implemented as:
     // stackedAreaChart.props.displayType = displayType;
     // stackedAreaChart.updateVis();
+    d3.select('#display-type-selection').on('change', function() {
+      displayType = d3.select(this).property('value');
+      console.log(displayType);
+      stackedAreaChart.props.displayType = displayType;
+      stackedAreaChart.updateVis();
+    });
   })
   .catch(error => console.error(error));
