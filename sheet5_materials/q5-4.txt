@@ -13,4 +13,7 @@
 13. True. Reordering is usually necessary to make groups of the data more clear.
 14. True. The radial symmetry of the circle is useful for cyclic data because you can easily compare different points in the same part of the cycle.
 15. True. The user may mistake area as important in terms of population, but a huge area may not represent many people.
-16. True. Although could be ordinal??
+16. True. The reader can easily tell the colors apart.
+17. False. Continuous rainbow colormaps are actually perceptually unordered.
+18. False. Bivariate colormaps are often misinterpreted because of cognitive load if there are many levels and many hues.
+19. True. Encoding luminance lets us see edges which are the most important for understanding an image
