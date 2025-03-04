@@ -7,7 +7,10 @@ export const scatterPlot = (parent, props) => {
     data,
     addPoint,
     margin,
-    circleRadius
+    circleRadius,
+    drawLine,
+    param1,
+    param2
   } = props;
 
   const width = +parent.attr('width');
@@ -143,6 +146,57 @@ export const scatterPlot = (parent, props) => {
     .attr('r', 0)
     .remove();
 
+  // draw a line if doing lin reg
+  if (drawLine) {
+    console.log('Drawing line with params:', param1, param2);  // Debug log
+    // Create line data points from domain bounds
+    const x0 = xScale.domain()[0];
+    const x1 = xScale.domain()[1];
+    const y0 = parseFloat(param1) + parseFloat(param2) * x0;
+    const y1 = parseFloat(param1) + parseFloat(param2) * x1;
+    
+    const lineData = [
+      { x: x0, y: y0 },
+      { x: x1, y: y1 }
+    ];
+    
+    console.log('Line data:', lineData);  // Debug log
+    
+    // Validate line data
+    if (lineData.some(d => isNaN(d.x) || isNaN(d.y))) {
+      console.error('Invalid line coordinates generated');
+      return;
+    }
+
+    // Create line generator
+    const lineGenerator = d3.line()
+      .x(d => xScale(d.x))
+      .y(d => yScale(d.y));
+    
+    // Draw the line - modified selection pattern
+    const regressionLine = gEnter.merge(g).selectAll('.regression-line').data([lineData]);
+    
+    // Handle enter selection
+    const regressionLineEnter = regressionLine
+      .enter()
+      .append('path')
+        .attr('class', 'regression-line')
+        .attr('fill', 'none')
+        .attr('stroke', 'red')
+        .attr('stroke-width', 2);
+
+    // Update both enter + update selections
+    regressionLineEnter
+      .merge(regressionLine)
+        .attr('d', lineGenerator);
+        
+    // Remove line when drawLine is false
+    regressionLine.exit().remove();
+  } else {
+    // Remove the line if drawLine is false
+    gEnter.merge(g).selectAll('.regression-line').remove();
+  }
+
 
   // zoom stuff
   const zoom = d3.zoom()
@@ -166,6 +220,21 @@ export const scatterPlot = (parent, props) => {
         .selectAll('circle')
         .attr('cx', d => newXScale(xValue(d)))
         .attr('cy', d => newYScale(yValue(d)));
+
+      // Update regression line if it exists
+      if (drawLine) {
+        const lineData = [
+          { x: newXScale.domain()[0], y: parseFloat(param1) + parseFloat(param2) * newXScale.domain()[0] },
+          { x: newXScale.domain()[1], y: parseFloat(param1) + parseFloat(param2) * newXScale.domain()[1] }
+        ];
+
+        const lineGenerator = d3.line()
+          .x(d => newXScale(d.x))
+          .y(d => newYScale(d.y));
+
+        gEnter.merge(g).select('.regression-line')
+          .attr('d', lineGenerator(lineData));
+      }
 
       // Maintain bold styling for zero lines
       xAxisG.merge(xAxisGEnter)
