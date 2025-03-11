@@ -1,11 +1,8 @@
 body {
-  margin: 0px;
-  overflow: hidden;
-}
-
-circle {
-  fill: steelblue;
-  opacity: 0.3;
+  max-height: 100vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 20px;
 }
 
 text {
@@ -66,9 +63,4 @@ text {
 
 #menus select option {
   font-size: 1rem;
-}
-
-circle:hover {
-  fill: red;
-  stroke: #333;
 }

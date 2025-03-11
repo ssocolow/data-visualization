@@ -7,8 +7,8 @@
 7. True. A scatter plot is the canonical example of comparing two quantitative variables.
 8. False. Position on a common scale is the most accurately perceived channel.
 9. False. If the regions are small and scattered then more bins can be used.
-10. False. Size can be changed independently of color.
-11. True, as long as the hues are positioned ordinally.
+10. True - size affects colors
+11. False, perceptual system does everything through relative not absolute.
 12. True. The user can see position on a common scale at different points in time.
 13. True. Reordering is usually necessary to make groups of the data more clear.
 14. True. The radial symmetry of the circle is useful for cyclic data because you can easily compare different points in the same part of the cycle.

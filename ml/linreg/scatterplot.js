@@ -10,7 +10,11 @@ export const scatterPlot = (parent, props) => {
     circleRadius,
     drawLine,
     param1,
-    param2
+    param2,
+    redData,
+    blueData,
+    chosenAlgo,
+    preserveGradient
   } = props;
 
   const width = +parent.attr('width');
@@ -35,13 +39,25 @@ export const scatterPlot = (parent, props) => {
   const g = parent.selectAll('.container').data([null]);
   const gEnter = g
     .enter().append('g')
-      .attr('class','container');
+      .attr('class', 'container');
 
-  gEnter
-    .merge(g)
+  // Merge and transform the container, but preserve existing content if preserveGradient is true
+  if (preserveGradient) {
+    // Only update the transform, don't recreate the container
+    parent.select('.container')
       .attr('transform', `translate(${margin.left},${margin.top})`);
-  
-        
+  } else {
+    gEnter
+      .merge(g)
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+  }
+
+  // Store existing gradient rect if we need to preserve it
+  let existingGradient;
+  if (preserveGradient) {
+    existingGradient = parent.select('.container').select('.heatmap-rect');
+  }
+
   // Add a background rect to capture clicks
   const backgroundRect = g.select('.background-rect').data([null]);
   const backgroundRectEnter = gEnter
@@ -51,6 +67,12 @@ export const scatterPlot = (parent, props) => {
       .attr('height', innerHeight)
       .attr('fill', 'none')
       .attr('pointer-events', 'all');
+
+  // If we preserved the gradient, make sure it's the first child
+  if (existingGradient.size() > 0) {
+    existingGradient.raise();
+    backgroundRect.raise();
+  }
 
   const xValue = d => d.x;
   const yValue = d => d.y;
@@ -114,7 +136,7 @@ export const scatterPlot = (parent, props) => {
       .style('font-weight', 'bold');
   
   // title
-  let title = 'Linear Regression Interactive Demo';
+  let title = 'ML prediction algorithms visualization';
   const titleText = gEnter.merge(g)
     .selectAll('.title').data([null]);
   const titleTextEnter = titleText
@@ -139,7 +161,18 @@ export const scatterPlot = (parent, props) => {
     .attr('stroke-width', 3)
     .attr('cx', d => xScale(xValue(d)))
     .attr('cy', d => yScale(yValue(d)))
-    .attr('r', circleRadius);
+    .attr('r', circleRadius)
+    .attr('fill', d => {
+      if (chosenAlgo === 'linearRegression') {
+        return 'orange';
+      } else {
+        if (redData.includes(d)) {
+          return 'red';
+        } else {
+          return 'blue';
+        }
+      }
+    });
   
   circles.exit()
   .transition()
@@ -280,7 +313,11 @@ export const scatterPlot = (parent, props) => {
         // Use the stored transform
         const newX = currentZoomTransform.rescaleX(xScale).invert(mouseX);
         const newY = currentZoomTransform.rescaleY(yScale).invert(mouseY);
-        addPoint(newX, newY);
+        if (chosenAlgo == "linear") {
+          addPoint(newX, newY);
+        } else {
+          d3.select()
+        }
       });
   
 };
