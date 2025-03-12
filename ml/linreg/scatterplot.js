@@ -14,8 +14,11 @@ export const scatterPlot = (parent, props) => {
     redData,
     blueData,
     chosenAlgo,
-    preserveGradient
+    preserveGradient,
+    decisionBoundaryVisualPoints
   } = props;
+  console.log("Receiving decisionBoundaryVisualPoints as:", decisionBoundaryVisualPoints);
+
 
   const width = +parent.attr('width');
   const height = +parent.attr('height');
@@ -178,6 +181,37 @@ export const scatterPlot = (parent, props) => {
   .transition()
     .attr('r', 0)
     .remove();
+  
+  // show decision boundary if in logistic regression
+  if (chosenAlgo == "logistic") {
+    console.log("Decision boundary points:", decisionBoundaryVisualPoints);
+    // Plot data
+    const circles2 = gEnter.merge(g)
+      .selectAll('.decision-boundary-point')
+      .data(decisionBoundaryVisualPoints);
+    
+    const circlesEnter2 = circles2
+      .enter().append('circle')
+        .attr('class', 'decision-boundary-point')
+        .attr('cx', innerWidth/2)
+        .attr('cy', innerHeight/2)
+        .attr('r', 0);
+    
+    circlesEnter2
+      .merge(circles2)
+      .attr('stroke-width', 3)
+      .attr('cx', d => xScale(d.x))
+      .attr('cy', d => yScale(d.y))
+      .attr('r', circleRadius)
+      .attr('fill', d => d.probability > 0.5 ? "red" : "blue")
+      .style('opacity', 0.5);
+    
+    // Remove old points
+    circles2.exit().remove();
+  } else {
+    // Remove decision boundary points when not in logistic mode
+    gEnter.merge(g).selectAll('.decision-boundary-point').remove();
+  }
 
   // draw a line if doing lin reg
   if (drawLine) {
@@ -316,7 +350,13 @@ export const scatterPlot = (parent, props) => {
         if (chosenAlgo == "linear") {
           addPoint(newX, newY);
         } else {
-          d3.select()
+          if (d3.select('#red-or-blue').value == "red") {
+            redData.push({
+              x: newX,
+              y: newY
+            })
+            console.log(redData);
+          }
         }
       });
   

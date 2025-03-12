@@ -10,6 +10,7 @@ let drawLine = false;
 let chosenAlgo = "linear";
 let redData = [];
 let blueData = [];
+let decisionBoundaryVisualPoints = [{x: 5, y: 5, probability: 0.2}];
 
 function clearPoints() {
   data = [];
@@ -89,7 +90,7 @@ function makeLogisticPrediction() {
   console.log("initial weights", weights);
   
   // Get the width and height from the SVG and account for margins properly
-  const margin = { top: 50, right: 40, bottom: 80, left: 150 };
+  const margin = { top: 0, right: 0, bottom: 0, left: 0 };
   const width = +svg.attr('width') - margin.left - margin.right;
   const height = +svg.attr('height') - margin.top - margin.bottom;
   
@@ -102,11 +103,6 @@ function makeLogisticPrediction() {
     .domain([0, d3.max(data, d => d.y)])
     .range([height, 0]);
 
-  // Create a grid of points for the heatmap
-  const gridSize = 20;
-  const xStep = width / gridSize;
-  const yStep = height / gridSize;
-  
   // Normalize the data
   const allX = [...redData, ...blueData].map(d => d.x);
   const allY = [...redData, ...blueData].map(d => d.y);
@@ -172,63 +168,25 @@ function makeLogisticPrediction() {
     console.log("gradient:", gradient);
     
     // update weights
-    const learning_rate = 0.1;
+    const learning_rate = 0.2;
     weights[0] -= gradient[0] * learning_rate;
     weights[1] -= gradient[1] * learning_rate;
     weights[2] -= gradient[2] * learning_rate;
     
-    // Create grid of probabilities
-    const gridPoints = [];
-    for (let i = 0; i <= gridSize; i++) {
-      for (let j = 0; j <= gridSize; j++) {
-        // Get data space coordinates
-        const x = xScale.invert(i * xStep);
-        const y = yScale.invert(j * yStep);
-        
-        const normalized_input = weights[0] * normalizeX(x) + weights[1] * normalizeY(-y) + weights[2];
+    // Create circles to see decision boundary
+    for (let i = -10; i <= 10; i++) {
+      for (let j = -10; j <= 10; j++) {        
+        const normalized_input = weights[0] * normalizeX(i) + weights[1] * normalizeY(j) + weights[2];
         const s = sigmoid(normalized_input);
         
-        gridPoints.push({
-          x: margin.left + i * xStep,
-          y: margin.top + j * yStep,
-          dataX: x,
-          dataY: y,
+        decisionBoundaryVisualPoints.push({
+          x: i,
+          y: j,
           probability: s
         });
       }
     }
-
-    // Sort grid points so lower probabilities (red) are drawn on top
-    gridPoints.sort((a, b) => a.probability - b.probability);
-
-    // Update visualization using SVG rectangles
-    const cells = svg.selectAll('.heatmap-cell')
-      .data(gridPoints);
-    
-    cells.enter()
-      .append('rect')
-      .attr('class', 'heatmap-cell')
-      .merge(cells)
-      .attr('x', d => d.x)
-      .attr('y', d => d.y)
-      .attr('width', xStep + 1)
-      .attr('height', yStep + 1)
-      .style('fill', d => {
-        if (d.probability > 0.5) {
-          const blueIntensity = Math.floor(255 * (0.5 + d.probability/2));
-          return `rgb(0,0,${blueIntensity})`;
-        } else {
-          const redIntensity = Math.floor(255 * (1 - d.probability));
-          return `rgb(${redIntensity},0,0)`;
-        }
-      })
-      .style('opacity', 0.8);
-
-    cells.exit().remove();
-    
-    // Make sure points are drawn on top
-    svg.selectAll('circle').raise();
-    
+      
     updateVis();
   }, 100);
 
@@ -245,16 +203,20 @@ function makeSVMPrediction() {
 
 function addPoint(x, y) {
   data.push({ x, y });
+  console.log(data);
   updateVis();
 }
 
 const updateVis = () => {
   console.log("Updating visualization");
+  console.log("Passing decisionBoundaryVisualPoints to scatterPlot:", decisionBoundaryVisualPoints);
+
   // refresh scatterPlot
   svg.call(scatterPlot, {
     data,
     addPoint,
-    margin: { top: 50, bottom: 80, left: 150, right: 40 },
+    margin: { top: 0, bottom: 0, left: 0, right: 0 },
+    // margin: { top: 50, bottom: 80, left: 150, right: 40 },
     circleRadius: 10,
     drawLine,
     param1,
@@ -262,7 +224,8 @@ const updateVis = () => {
     redData,
     blueData,
     chosenAlgo,
-    preserveGradient: true
+    preserveGradient: true,
+    decisionBoundaryVisualPoints
   });
 
   // Create matrix string from data points
@@ -273,8 +236,16 @@ const updateVis = () => {
     : 'empty-matrix';
 
   // refresh math using MathJax
+  let formulaStr = '';
+  if (chosenAlgo === "linear") {
+    formulaStr = `\\text{Linear Regression Formula: } y = ${param1} + ${param2}x`;
+  } else if (chosenAlgo === "logistic") {
+    formulaStr = `\\text{Logistic Regression Formula: } P(y=1) = \\frac{1}{1 + e^{-(w_0 + w_1x + w_2y)}}`;
+  }
+
   d3.select('#math').html(`
-    <p>\\[${matrixStr}\\]</p>`)
+    <p>\\[${matrixStr}\\]</p>
+    <p>\\[${formulaStr}\\]</p>`)
     .each(() => { MathJax.typesetPromise() });
 };
 
