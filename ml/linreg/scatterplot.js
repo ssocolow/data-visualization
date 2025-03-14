@@ -185,32 +185,46 @@ export const scatterPlot = (parent, props) => {
   // show decision boundary if in logistic regression
   if (chosenAlgo == "logistic") {
     console.log("Decision boundary points:", decisionBoundaryVisualPoints);
-    // Plot data
+    
+    // Plot decision boundary points
     const circles2 = gEnter.merge(g)
-      .selectAll('.decision-boundary-point')
-      .data(decisionBoundaryVisualPoints);
+      .selectAll('circle.decision-boundary-point')
+      .data(decisionBoundaryVisualPoints.filter(d => d.probability !== undefined));
     
+    // Handle exit selection with transition
+    circles2.exit()
+      .transition()
+      .duration(200)
+      .attr('r', 0)
+      .remove();
+    
+    // Handle enter selection
     const circlesEnter2 = circles2
-      .enter().append('circle')
-        .attr('class', 'decision-boundary-point')
-        .attr('cx', innerWidth/2)
-        .attr('cy', innerHeight/2)
-        .attr('r', 0);
-    
-    circlesEnter2
-      .merge(circles2)
-      .attr('stroke-width', 3)
+      .enter()
+      .append('circle')
+      .attr('class', 'decision-boundary-point')
+      .attr('r', 0)  // Start with radius 0
       .attr('cx', d => xScale(d.x))
-      .attr('cy', d => yScale(d.y))
-      .attr('r', circleRadius)
-      .attr('fill', d => d.probability > 0.5 ? "red" : "blue")
-      .style('opacity', 0.5);
+      .attr('cy', d => yScale(d.y));
     
-    // Remove old points
-    circles2.exit().remove();
+    // Update both enter and existing points
+    circles2
+      .merge(circlesEnter2)
+      .transition()
+      .duration(200)
+      .attr('cx', d => xScale(d.x))
+      .attr('cy', d => yScale(-d.y))  // Negate y to match the training data
+      .attr('r', circleRadius)
+      .attr('fill', d => d.probability > 0.5 ? "blue" : "red")
+      .style('opacity', 0.2);
   } else {
-    // Remove decision boundary points when not in logistic mode
-    gEnter.merge(g).selectAll('.decision-boundary-point').remove();
+    // Remove decision boundary points when not in logistic mode with transition
+    gEnter.merge(g)
+      .selectAll('circle.decision-boundary-point')
+      .transition()
+      .duration(200)
+      .attr('r', 0)
+      .remove();
   }
 
   // draw a line if doing lin reg

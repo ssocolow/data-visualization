@@ -10,7 +10,18 @@ let drawLine = false;
 let chosenAlgo = "linear";
 let redData = [];
 let blueData = [];
-let decisionBoundaryVisualPoints = [{x: 5, y: 5, probability: 0.2}];
+let decisionBoundaryVisualPoints = [];
+let NUM_DECISION_BOUNDARY_POINTS = 50;
+
+for (let i = -10; i <= 10; i+=2) {
+  for (let j = -10; j <= 10; j+=2) {
+    decisionBoundaryVisualPoints.push({
+      x: i,
+      y: j,
+      probability: 0
+    });
+  }
+}
 
 function clearPoints() {
   data = [];
@@ -174,17 +185,10 @@ function makeLogisticPrediction() {
     weights[2] -= gradient[2] * learning_rate;
     
     // Create circles to see decision boundary
-    for (let i = -10; i <= 10; i++) {
-      for (let j = -10; j <= 10; j++) {        
-        const normalized_input = weights[0] * normalizeX(i) + weights[1] * normalizeY(j) + weights[2];
+    for (let point of decisionBoundaryVisualPoints) {
+        const normalized_input = weights[0] * normalizeX(point.x) + weights[1] * normalizeY(-point.y) + weights[2];
         const s = sigmoid(normalized_input);
-        
-        decisionBoundaryVisualPoints.push({
-          x: i,
-          y: j,
-          probability: s
-        });
-      }
+        point.probability = s;
     }
       
     updateVis();
