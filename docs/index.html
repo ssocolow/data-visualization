@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ML prediction algorithms visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        startup: {
+            ready: () => {
+                window.MathJaxReady = Promise.resolve(window.MathJax);
+                return window.MathJax.startup.defaultReady();
+            }
+        }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.0.0/math.min.js"></script>
+  </head>
+  <body>
+    <svg width="960" height="500"></svg>
+    <script src="index.js" type="module"></script>
+    <div>
+      <p>You can zoom and pan the scatter plot.</p>
+      
+      <p>Flow:</p>
+      <ol>
+        <li>Click on the scatter plot to add points.</li>
+        <li>Click "Solve For Params" to see what parameters create the linear regression line of best fit.</li>
+        <li>Change the dropdown to "Logistic Regression" to split the points into two classes - red and blue. The objective is now to classify the points as either red or blue.</li>
+        <li>Click "Solve For Params" to see what parameters create the logistic regression classification boundary.</li>
+      </ol>
+      <button id="clear-button">Clear Points</button>
+      <button id="solve-params-button">Solve For Params</button>
+      <select id="algorithm-select">
+        <option value="linear">Linear Regression</option>
+        <option value="logistic">Logistic Regression</option>
+        <option value="svm">Support Vector Machine (SVM)</option>
+      </select>
+      <select id="blue-or-red" style="display: none;">
+        <option value="blue">Blue</option>
+        <option value="red">Red</option>
+      </select>
+      <p><a href="https://jaketae.github.io/study/linear-regression/">Learn about linear regression</a></p>
+      <p><a href="https://jaketae.github.io/study/logistic-regression/">Learn about logistic regression</a></p>
+      <p><a href="https://en.wikipedia.org/wiki/Support_vector_machine">Learn about support vector machines</a></p>
+      <div id="math"></div>
+    </div>
+  </body>
+</html>
