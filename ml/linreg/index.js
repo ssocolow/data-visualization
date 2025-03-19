@@ -12,9 +12,10 @@ let redData = [];
 let blueData = [];
 let decisionBoundaryVisualPoints = [];
 let NUM_DECISION_BOUNDARY_POINTS = 50;
+let blueOrRed = "blue";
 
-for (let i = -10; i <= 10; i+=2) {
-  for (let j = -10; j <= 10; j+=2) {
+for (let i = -20; i <= 20; i+=1) {
+  for (let j = -20; j <= 20; j+=1) {
     decisionBoundaryVisualPoints.push({
       x: i,
       y: j,
@@ -38,6 +39,15 @@ d3.select('#solve-params-button').on('click',function() {
     makeSVMPrediction();
   }
 });
+d3.select('#blue-or-red').on('change', function() {
+  if (blueOrRed === "blue") {
+    blueOrRed = "red";
+  } else {
+    blueOrRed = "blue";
+  }
+  console.log(blueOrRed);
+  updateVis();
+})
 d3.select('#algorithm-select').on('change', function() {
   chosenAlgo = this.value;
   console.log('algo changed to', chosenAlgo);
@@ -50,20 +60,32 @@ d3.select('#algorithm-select').on('change', function() {
     drawLine = false;
     // Now: points above y=x are blue (class 1), points below are red (class 0)
     for (let d of data) {
-      if (d.y >= d.x) {
-        blueData.push(d);
-      } else {
-        redData.push(d);
+      if (d.y < d.x) {
+        d.red = true;
       }
     }
     // show the blue-or-red selector
-    d3.select('#red-or-blue').style('display', 'block');
+    d3.select('#blue-or-red').style('display', 'block');
   }
   else {
-    d3.select('#red-or-blue').style('display', 'none');
+    d3.select('#blue-or-red').style('display', 'none');
+    // Remove decision boundary points when not in logistic mode with transition
+    d3.selectAll('circle.decision-boundary-point')
+      .transition()
+      .duration(200)
+      .attr('r', 0)
+      .remove();
   }
   updateVis();
 });
+
+function addToBlue(p) {
+  blueData.push(p);
+}
+
+function addToRed(p) {
+  redData.push(p);
+}
 
 function makeLinearPrediction() {
   // data is array of objects with x and y
@@ -99,6 +121,17 @@ function makeLogisticPrediction() {
   console.log("making logistic prediction");
   let weights = [Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1];
   console.log("initial weights", weights);
+
+  let blueData = [];
+  let redData = [];
+
+  for (let dat of data) {
+    if (dat.red) {
+      redData.push(dat);
+    } else {
+      blueData.push(dat);
+    }
+  }
   
   // Get the width and height from the SVG and account for margins properly
   const margin = { top: 0, right: 0, bottom: 0, left: 0 };
@@ -205,9 +238,9 @@ function makeSVMPrediction() {
   return "not yet";
 }
 
-function addPoint(x, y) {
-  data.push({ x, y });
-  console.log(data);
+function addPoint(x, y, red) {
+  data.push({ x, y, red});
+  console.log('addPoint data: ', data);
   updateVis();
 }
 
@@ -229,7 +262,10 @@ const updateVis = () => {
     blueData,
     chosenAlgo,
     preserveGradient: true,
-    decisionBoundaryVisualPoints
+    decisionBoundaryVisualPoints,
+    addToBlue,
+    addToRed,
+    blueOrRed
   });
 
   // Create matrix string from data points
@@ -249,8 +285,15 @@ const updateVis = () => {
 
   d3.select('#math').html(`
     <p>\\[${matrixStr}\\]</p>
-    <p>\\[${formulaStr}\\]</p>`)
-    .each(() => { MathJax.typesetPromise() });
+    <p>\\[${formulaStr}\\]</p>`);
+
+  // Safely handle MathJax rendering using Promise
+  if (window.MathJax) {
+    window.MathJax.typesetPromise && window.MathJax.typesetPromise()
+      .catch(err => {
+        console.warn('MathJax rendering failed:', err);
+      });
+  }
 };
 
 updateVis();

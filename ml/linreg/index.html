@@ -3,10 +3,23 @@
   <head>
     <title>ML prediction algorithms visualization</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        startup: {
+            ready: () => {
+                window.MathJaxReady = Promise.resolve(window.MathJax);
+                return window.MathJax.startup.defaultReady();
+            }
+        }
+    };
+    </script>
     <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.0.0/math.min.js"></script>
-
   </head>
   <body>
     <svg width="960" height="500"></svg>
@@ -28,7 +41,7 @@
         <option value="logistic">Logistic Regression</option>
         <option value="svm">Support Vector Machine (SVM)</option>
       </select>
-      <select id="red-or-blue" style="display: none;">
+      <select id="blue-or-red" style="display: none;">
         <option value="blue">Blue</option>
         <option value="red">Red</option>
       </select>

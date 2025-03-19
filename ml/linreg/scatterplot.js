@@ -15,7 +15,10 @@ export const scatterPlot = (parent, props) => {
     blueData,
     chosenAlgo,
     preserveGradient,
-    decisionBoundaryVisualPoints
+    decisionBoundaryVisualPoints,
+    addToBlue,
+    addToRed,
+    blueOrRed
   } = props;
   console.log("Receiving decisionBoundaryVisualPoints as:", decisionBoundaryVisualPoints);
 
@@ -43,39 +46,11 @@ export const scatterPlot = (parent, props) => {
   const gEnter = g
     .enter().append('g')
       .attr('class', 'container');
+  
+  gEnter.merge(g)
+    .attr('transform', `translate(${margin.left},${margin.top})`);
 
-  // Merge and transform the container, but preserve existing content if preserveGradient is true
-  if (preserveGradient) {
-    // Only update the transform, don't recreate the container
-    parent.select('.container')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-  } else {
-    gEnter
-      .merge(g)
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-  }
-
-  // Store existing gradient rect if we need to preserve it
-  let existingGradient;
-  if (preserveGradient) {
-    existingGradient = parent.select('.container').select('.heatmap-rect');
-  }
-
-  // Add a background rect to capture clicks
-  const backgroundRect = g.select('.background-rect').data([null]);
-  const backgroundRectEnter = gEnter
-    .append('rect')
-      .attr('class', 'background-rect')
-      .attr('width', innerWidth)
-      .attr('height', innerHeight)
-      .attr('fill', 'none')
-      .attr('pointer-events', 'all');
-
-  // If we preserved the gradient, make sure it's the first child
-  if (existingGradient.size() > 0) {
-    existingGradient.raise();
-    backgroundRect.raise();
-  }
+  
 
   const xValue = d => d.x;
   const yValue = d => d.y;
@@ -153,7 +128,7 @@ export const scatterPlot = (parent, props) => {
   
   // Plot data
   const circles = gEnter.merge(g)
-    .selectAll('circle').data(data);
+    .selectAll('circle:not(.decision-boundary-point)').data(data);
   const circlesEnter = circles
     .enter().append('circle')
       .attr('cx', innerWidth/2)
@@ -167,9 +142,9 @@ export const scatterPlot = (parent, props) => {
     .attr('r', circleRadius)
     .attr('fill', d => {
       if (chosenAlgo === 'linearRegression') {
-        return 'orange';
+        return 'blue';
       } else {
-        if (redData.includes(d)) {
+        if (d.red) {
           return 'red';
         } else {
           return 'blue';
@@ -182,50 +157,63 @@ export const scatterPlot = (parent, props) => {
     .attr('r', 0)
     .remove();
   
+
+    let m1 = [{x:2, y:2, probability:0.8},{x:-2, y:2, probability:0.2}]
+  // let m1 = [];
+  // for (let i = -10; i <= 10; i+=2) {
+  //   for (let j = -10; j <= 10; j+=2) {
+  //     m1.push({
+  //       x: i,
+  //       y: j,
+  //       probability: 0.2
+  //     });
+  //   }
+  // }
+  
+  //put these invisible points on the graph
+  // Plot decision boundary points
+  const circles2 = gEnter.merge(g)
+  .selectAll('circle.decision-boundary-point')
+  .data(decisionBoundaryVisualPoints);
+
+  // console.log("CIRCLES 2", circles2);
+
+// Handle enter selection
+const circlesEnter2 = circles2
+  .enter()
+  .append('circle')
+  .attr('class', 'decision-boundary-point')
+  .attr('r', 0)  // Start with radius 0
+  .attr('cx', d => xScale(d.x))
+  .attr('cy', d => yScale(d.y));
+  
+  
   // show decision boundary if in logistic regression
-  if (chosenAlgo == "logistic") {
-    console.log("Decision boundary points:", decisionBoundaryVisualPoints);
+  if (chosenAlgo === "logistic") {
+    // console.log("Decision boundary points:", decisionBoundaryVisualPoints);
     
-    // Plot decision boundary points
-    const circles2 = gEnter.merge(g)
-      .selectAll('circle.decision-boundary-point')
-      .data(decisionBoundaryVisualPoints.filter(d => d.probability !== undefined));
-    
-    // Handle exit selection with transition
-    circles2.exit()
-      .transition()
-      .duration(200)
-      .attr('r', 0)
-      .remove();
-    
-    // Handle enter selection
-    const circlesEnter2 = circles2
-      .enter()
-      .append('circle')
-      .attr('class', 'decision-boundary-point')
-      .attr('r', 0)  // Start with radius 0
-      .attr('cx', d => xScale(d.x))
-      .attr('cy', d => yScale(d.y));
     
     // Update both enter and existing points
     circles2
       .merge(circlesEnter2)
-      .transition()
-      .duration(200)
+      // Remove transition during initial optimization
+      // .transition()
+      // .duration(4000)
       .attr('cx', d => xScale(d.x))
-      .attr('cy', d => yScale(-d.y))  // Negate y to match the training data
+      .attr('cy', d => yScale(d.y))
       .attr('r', circleRadius)
       .attr('fill', d => d.probability > 0.5 ? "blue" : "red")
       .style('opacity', 0.2);
-  } else {
-    // Remove decision boundary points when not in logistic mode with transition
-    gEnter.merge(g)
-      .selectAll('circle.decision-boundary-point')
-      .transition()
-      .duration(200)
-      .attr('r', 0)
-      .remove();
+        
+    // console.log('Final circle count:', gEnter.merge(g).selectAll('circle.decision-boundary-point').size());
   }
+    // Remove decision boundary points when not in logistic mode with transition
+    // gEnter.merge(g)
+    //   .selectAll('circle.decision-boundary-point')
+    //   .transition()
+    //   .duration(200)
+    //   .attr('r', 0)
+    //   .remove();
 
   // draw a line if doing lin reg
   if (drawLine) {
@@ -296,11 +284,18 @@ export const scatterPlot = (parent, props) => {
       yAxisG.merge(yAxisGEnter).call(yAxis.scale(newYScale))
         .select('.domain').remove();
 
-      // Update circles
+      // Update data points only (not decision boundary points)
       gEnter.merge(g)
         .selectAll('circle')
         .attr('cx', d => newXScale(xValue(d)))
         .attr('cy', d => newYScale(yValue(d)));
+
+      // // update logistic regression visualization circles if they exist
+      // if (chosenAlgo == "logistic") {
+      //   gEnter.merge(g).selectAll('circle.decision-boundary-point')
+      //   .attr('cx', d => newXScale(d.x))
+      //   .attr('cy', d => newYScale(d.y));
+      // }
 
       // Update regression line if it exists
       if (drawLine) {
@@ -349,7 +344,17 @@ export const scatterPlot = (parent, props) => {
   gEnter.merge(g)
     .call(zoom)
     .call(zoom.transform, currentZoomTransform);
-  
+ 
+ // Add a background rect to capture clicks
+  const backgroundRect = g.select('.background-rect').data([null]);
+  const backgroundRectEnter = gEnter
+    .append('rect')
+      .attr('class', 'background-rect')
+      .attr('width', innerWidth)
+      .attr('height', innerHeight)
+      .attr('fill', 'none')
+      .attr('pointer-events', 'all');
+
   // Handle clicks separately
   backgroundRectEnter
     .merge(backgroundRect)
@@ -361,15 +366,27 @@ export const scatterPlot = (parent, props) => {
         // Use the stored transform
         const newX = currentZoomTransform.rescaleX(xScale).invert(mouseX);
         const newY = currentZoomTransform.rescaleY(yScale).invert(mouseY);
-        if (chosenAlgo == "linear") {
-          addPoint(newX, newY);
+        console.log(newX, newY)
+
+        if (chosenAlgo === "linear") {
+          addPoint(newX, newY, false);
         } else {
-          if (d3.select('#red-or-blue').value == "red") {
-            redData.push({
-              x: newX,
-              y: newY
-            })
-            console.log(redData);
+          if (blueOrRed === "red") {
+            // addToRed({
+            //   x: newX,
+            //   y: newY,
+            //   red: true
+            // })
+          addPoint(newX, newY, true);
+            console.log("reddata");
+          } else {
+            // addToBlue({
+            //   x: newX,
+            //   y: newY,
+            //   red: false
+            // })
+          addPoint(newX, newY, false);
+            console.log("bluedata");
           }
         }
       });
