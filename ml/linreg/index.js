@@ -235,6 +235,8 @@ function makeLogisticPrediction() {
 }
 
 function makeSVMPrediction() {
+  // now is the time to set things right
+  // want to find the hyperplane that best separates the data (max-margin)
   return "not yet";
 }
 
