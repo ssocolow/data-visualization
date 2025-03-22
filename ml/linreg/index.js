@@ -1,4 +1,5 @@
 import { scatterPlot }  from './scatterplot.js';
+import { SVM } from './SVM.js';
 // import { dropdownMenu } from './dropdownMenu.js';
 const svg = d3.select('svg');
 
@@ -237,7 +238,18 @@ function makeLogisticPrediction() {
 function makeSVMPrediction() {
   // now is the time to set things right
   // want to find the hyperplane that best separates the data (max-margin)
-  return "not yet";
+  let svm = new SVM(0.01, 0.01, 1000); // Create SVM instance with learning rate, lambda, and epochs
+  let svmdata = data.map(function (d) {
+    if (d.red) {
+      return [d.x, d.y, 1];
+    } else {
+      return [d.x, d.y, -1];
+    }
+  });
+  console.log(svmdata);
+  svm.train(svmdata); // Train SVM on given data
+
+  console.log(svm.predict(4, 4)); // Predict class label for a new point (4,4)
 }
 
 function addPoint(x, y, red) {
