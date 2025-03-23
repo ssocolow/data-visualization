@@ -68,7 +68,17 @@ d3.select('#algorithm-select').on('change', function() {
     // show the blue-or-red selector
     d3.select('#blue-or-red').style('display', 'block');
   }
-  else {
+  else if (chosenAlgo === "svm") {
+    drawLine = false;
+    // Now: points above y=x are blue (class 1), points below are red (class 0)
+    for (let d of data) {
+      if (d.y < d.x) {
+        d.red = true;
+      }
+    }
+    // show the blue-or-red selector
+    d3.select('#blue-or-red').style('display', 'block');
+  } else {
     d3.select('#blue-or-red').style('display', 'none');
     // Remove decision boundary points when not in logistic mode with transition
     d3.selectAll('circle.decision-boundary-point')
@@ -235,21 +245,41 @@ function makeLogisticPrediction() {
   }, 8000);
 }
 
+// takes in regular data format point and returns the [x, y, +-1] point
+function pointToSVMExpected(p) {
+  if (p.red) {
+      return [p.x, p.y, -1];
+    } else {
+      return [p.x, p.y, 1];
+    }
+}
+
 function makeSVMPrediction() {
   // now is the time to set things right
   // want to find the hyperplane that best separates the data (max-margin)
-  let svm = new SVM(0.01, 0.01, 1000); // Create SVM instance with learning rate, lambda, and epochs
-  let svmdata = data.map(function (d) {
-    if (d.red) {
-      return [d.x, d.y, 1];
-    } else {
-      return [d.x, d.y, -1];
-    }
-  });
-  console.log(svmdata);
-  svm.train(svmdata); // Train SVM on given data
+  let svm = new SVM(0.01, 0.1); // Create SVM instance with learning rate, lambda, and epochs
+  let svmdata = data.map(d => pointToSVMExpected(d));
 
-  console.log(svm.predict(4, 4)); // Predict class label for a new point (4,4)
+  let interval = setInterval(() => {    
+    console.log('training SVM');
+    svm.train(svmdata, 1); // Train SVM on given data
+      
+    // Create circles to see decision boundary
+    for (let point of decisionBoundaryVisualPoints) {
+        const s = svm.predict(point.x, point.y);
+        point.probability = s;
+    }
+      
+    updateVis();
+  }, 100);
+  console.log("SVM info: ", svm.info());
+  
+  setTimeout(() => {
+    clearInterval(interval);
+    // Clean up heatmap cells when done
+    // svg.selectAll('.heatmap-cell').remove();
+    console.log("SVM info: ", svm.info());
+  }, 8000);
 }
 
 function addPoint(x, y, red) {
@@ -259,8 +289,8 @@ function addPoint(x, y, red) {
 }
 
 const updateVis = () => {
-  console.log("Updating visualization");
-  console.log("Passing decisionBoundaryVisualPoints to scatterPlot:", decisionBoundaryVisualPoints);
+  // console.log("Updating visualization");
+  // console.log("Passing decisionBoundaryVisualPoints to scatterPlot:", decisionBoundaryVisualPoints);
 
   // refresh scatterPlot
   svg.call(scatterPlot, {

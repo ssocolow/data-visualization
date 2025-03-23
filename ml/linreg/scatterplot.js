@@ -20,7 +20,7 @@ export const scatterPlot = (parent, props) => {
     addToRed,
     blueOrRed
   } = props;
-  console.log("Receiving decisionBoundaryVisualPoints as:", decisionBoundaryVisualPoints);
+  // console.log("Receiving decisionBoundaryVisualPoints as:", decisionBoundaryVisualPoints);
 
 
   const width = +parent.attr('width');
@@ -189,7 +189,7 @@ const circlesEnter2 = circles2
   
   
   // show decision boundary if in logistic regression
-  if (chosenAlgo === "logistic") {
+  if (chosenAlgo === "logistic" || chosenAlgo === "svm") {
     // console.log("Decision boundary points:", decisionBoundaryVisualPoints);
     
     
@@ -202,7 +202,13 @@ const circlesEnter2 = circles2
       .attr('cx', d => xScale(d.x))
       .attr('cy', d => yScale(d.y))
       .attr('r', circleRadius)
-      .attr('fill', d => d.probability > 0.5 ? "blue" : "red")
+      .attr('fill', function (d) {
+        if (d.probability > 0.5) {
+          return "blue";
+        } else {
+          return "red";
+        }
+      })
       .style('opacity', 0.2);
         
     // console.log('Final circle count:', gEnter.merge(g).selectAll('circle.decision-boundary-point').size());

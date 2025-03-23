@@ -1,28 +1,28 @@
 // from chatgpt
 export class SVM {
-    constructor(learningRate = 0.01, lambda = 0.01, epochs = 1000) {
+    constructor(learningRate = 0.01, C = 0.1) {
         this.learningRate = learningRate; // Step size for gradient descent
-        this.lambda = lambda; // Regularization parameter to control margin softness
-        this.epochs = epochs; // Number of training iterations
-        this.w = [0, 0]; // Initialize weight vector (for 2D input space)
+        this.C = C; // Regularization parameter to control margin softness
+        this.w = [2 * Math.random() - 1, 2 * Math.random() - 1]; // Initialize weight vector (for 2D input space)
         this.b = 0; // Initialize bias term
     }
 
-    train(data) {
-        for (let epoch = 0; epoch < this.epochs; epoch++) { // Loop over epochs
+    train(data, epochs) {
+        for (let epoch = 0; epoch < epochs; epoch++) { // Loop over epochs
             for (let i = 0; i < data.length; i++) { // Loop over all training data points
                 let [x, y, label] = data[i]; // Extract x, y coordinates and label (+1 or -1)
                 let margin = label * (this.w[0] * x + this.w[1] * y + this.b); // Compute margin
 
                 if (margin >= 1) {
                     // If correctly classified (margin is sufficient), apply only regularization
-                    this.w[0] -= this.learningRate * this.lambda * this.w[0]; // Update weight w0
-                    this.w[1] -= this.learningRate * this.lambda * this.w[1]; // Update weight w1
+                    this.w[0] -= this.learningRate * this.w[0]; // Update weight w0
+                    this.w[1] -= this.learningRate * this.w[1]; // Update weight w1
+                    // No bias update when correctly classified
                 } else {
-                    // If misclassified, apply hinge loss gradient update
-                    this.w[0] -= this.learningRate * (this.lambda * this.w[0] - label * x); // Update w0
-                    this.w[1] -= this.learningRate * (this.lambda * this.w[1] - label * y); // Update w1
-                    this.b -= this.learningRate * (-label); // Update bias term
+                    // If misclassified or within margin, apply hinge loss gradient update and regularization
+                    this.w[0] -= this.learningRate * (this.w[0] - this.C * label * x); // Update w0
+                    this.w[1] -= this.learningRate * (this.w[1] - this.C * label * y); // Update w1
+                    this.b -= this.learningRate * (this.C * -label); // Update bias with proper scaling
                 }
             }
         }
@@ -32,6 +32,10 @@ export class SVM {
         // Compute the decision function value
         let result = this.w[0] * x + this.w[1] * y + this.b;
         return result >= 0 ? 1 : -1; // Return class label based on sign
+    }
+
+    info() {
+        return `lr: ${this.learningRate}, w: ${this.w}, b: ${this.b}`;
     }
 } 
 
