@@ -31,8 +31,10 @@
       <ol>
         <li>Click on the scatter plot to add points.</li>
         <li>Click "Solve For Params" to see what parameters create the linear regression line of best fit.</li>
-        <li>Change the dropdown to "Logistic Regression" to split the points into two classes - red and blue. The objective is now to classify the points as either red or blue.</li>
-        <li>Click "Solve For Params" to see what parameters create the logistic regression classification boundary.</li>
+        <li>Change the dropdown to "Logistic Regression" to split the points into two classes - red and blue. Initially, points above y=x are made to be blue and points below y=x are red. You can click to add more points and can use the drop down to place blue or red points. The objective is now to classify the points as either red or blue.</li>
+        <li>Click "Solve For Params" to see the logistic regression classification boundary as it runs gradient descent for 8 seconds.</li>
+        <li>You can add more points and hit "Solve For Params" again once the boundary line has stopped moving.</li>
+        <li>Switch to "Support Vector Machine (SVM)" and hit "Solve For Params" to run 8 seconds of gradient descent for that model.</li>
       </ol>
       <button id="clear-button">Clear Points</button>
       <button id="solve-params-button">Solve For Params</button>
